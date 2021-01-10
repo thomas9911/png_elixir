@@ -15,6 +15,6 @@ defmodule Png.Chunk.Data do
     data
     |> Enum.map(fn x -> [filter_method | x] end)
     |> List.flatten()
-    |> Zlib.compress()
+    |> Zlib.compress(level: 9)
   end
 end

@@ -15,18 +15,12 @@ defmodule Png.Chunk.Unhandled do
   @impl true
   def parameter(), do: {:list, :unhandled}
 
-  def to_chunk_data(%__MODULE__{
-        raw: raw,
-        raw_type: raw_type
-      }) do
-    BinaryHelpers.to_list(raw_type) ++ raw
-  end
-
   def to_chunk(
         %__MODULE__{
+          raw: raw,
           raw_type: raw_type
         } = prop
       ) do
-    Chunk.new(to_chunk_data(prop), raw_type)
+    Chunk.new(raw, raw_type)
   end
 end

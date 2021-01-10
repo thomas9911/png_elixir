@@ -6,10 +6,11 @@ defmodule Png.Zlib do
   alias Png.BinaryHelpers
 
   @doc """
+  compress data using :zlib.deflate
 
-  options:
-  level: 
-    one of:
+  options:  
+  - level:  
+    - one of:  
       - :none 
       - :default 
       - :best_compression 
@@ -28,6 +29,9 @@ defmodule Png.Zlib do
     |> BinaryHelpers.to_list()
   end
 
+  @doc """
+  decompress data using :zlib.inflate
+  """
   def decompress(data) do
     ref = :zlib.open()
     :ok = :zlib.inflateInit(ref)

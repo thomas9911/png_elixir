@@ -10,6 +10,7 @@ defmodule Png.Chunks do
 
   @spec interpret([Chunk.t()]) :: Png.t()
   def interpret(chunks) do
+    IO.inspect(chunks)
     do_interpret(chunks, %Png{})
   end
 

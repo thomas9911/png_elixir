@@ -102,4 +102,51 @@ defmodule Png.Chunk.Header do
     |> Enum.join()
     |> BinaryHelpers.to_list()
   end
+
+  def print(%__MODULE__{
+        width: width,
+        height: height,
+        depth: depth,
+        color_type: color_type,
+        compression_method: compression_method,
+        filter_method: filter_method,
+        interlace_method: interlace_method
+      }) do
+    Enum.join(
+      [
+        printer(:width, width),
+        printer(:height, height),
+        printer(:depth, depth),
+        printer(:color_type, color_type),
+        printer(:compression_method, compression_method),
+        printer(:filter_method, filter_method),
+        printer(:interlace_method, interlace_method)
+      ],
+      "\n"
+    )
+  rescue
+    FunctionClauseError ->
+      "invalid meta data\nUse IO.inspect(png.header) to check the meta data"
+  end
+
+  defp printer(:width, width), do: "width: #{width} pixels"
+  defp printer(:height, height), do: "height: #{height} pixels"
+  defp printer(:depth, 1), do: "bit depth: 1 bit"
+  defp printer(:depth, depth), do: "bit depth: #{depth} bits"
+  defp printer(:color_type, 0), do: "color type: Grayscale"
+  defp printer(:color_type, 2), do: "color type: RGB"
+  defp printer(:color_type, 3), do: "color type: Indexed"
+  defp printer(:color_type, 4), do: "color type: Grayscale + Alpha"
+  defp printer(:color_type, 6), do: "color type: RGBA"
+
+  defp printer(:compression_method, 0),
+    do: "compression method: deflate/inflate compression with a 32K sliding window"
+
+  defp printer(:filter_method, 0), do: "filter method: None"
+  defp printer(:filter_method, 1), do: "filter method: Sub"
+  defp printer(:filter_method, 2), do: "filter method: Up"
+  defp printer(:filter_method, 3), do: "filter method: Average"
+  defp printer(:filter_method, 4), do: "filter method: Paeth"
+  defp printer(:interlace_method, 0), do: "interlace method: None"
+  defp printer(:interlace_method, 1), do: "interlace method: Adam7"
 end

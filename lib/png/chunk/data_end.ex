@@ -14,7 +14,11 @@ defmodule Png.Chunk.DataEnd do
       |> Zlib.decompress()
       |> BinaryHelpers.from_list()
 
-    parse_lines(raw_bytes, [], height, png)
+    IO.inspect(png.extra)
+
+    raw_bytes
+    |> parse_lines([], height, png)
+    |> apply_interlacing(png)
   end
 
   defp parse_lines(_input, output, 0, _png) do
@@ -46,6 +50,15 @@ defmodule Png.Chunk.DataEnd do
     pixel = BinaryHelpers.to_list(<<chunk::size(n)>>)
 
     parse_pixels(rest, [pixel | output], remaining_pixels - 1, pixel_size, depth)
+  end
+
+  def apply_interlacing(pixels, %{header: %{interlace_method: 0}}), do: pixels
+
+  def apply_interlacing(pixels, %{header: %{interlace_method: 1}}) do
+    # pixel_list = Enum.flat_map(pixels, & &1)
+
+    # raise "XD"
+    pixels
   end
 
   # Gray

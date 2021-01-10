@@ -6,6 +6,7 @@ defmodule Png.Chunker do
 
   def build(png) do
     Enum.flat_map([:header, :unhandled, :data, :end], &do_build(png, &1))
+    |> IO.inspect()
   end
 
   defp do_build(%{header: header} = _png, :header) do
@@ -19,7 +20,9 @@ defmodule Png.Chunker do
     extra
     |> Map.get(:unhandled, [])
     |> Enum.map(&Unhandled.to_chunk/1)
-    |> :lists.reverse()
+
+    # |> IO.inspect()
+    # |> :lists.reverse()
   end
 
   defp do_build(png, :data) do
